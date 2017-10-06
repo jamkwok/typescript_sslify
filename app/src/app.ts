@@ -12,10 +12,9 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 
 // Application
-const SslSentry = require("./src/sslSentry");
+import { SslSentry } from "./src/sslSentry";
+import { SslScheduler } from "./src/sslScheduler";
 const sslSentry = new SslSentry();
-
-const SslScheduler = require("./src/sslScheduler");
 const sslScheduler = new SslScheduler();
 
 // configure app to use bodyParser()
