@@ -1,0 +1,7 @@
+region = "sydney"
+sshKey = "James.Kwok"
+//myIp = "0.0.0.0/0"
+myIp = "210.10.203.133/32"
+dnsApex = "siteminderlabs.com"
+dynamoReadCap = "2"
+dynamoWriteCap = "2"

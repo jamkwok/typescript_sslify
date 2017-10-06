@@ -1,0 +1,43 @@
+{
+  "TrustedSigners": {
+    "Enabled": false,
+    "Quantity": 0
+  },
+  "LambdaFunctionAssociations": {
+    "Quantity": 0
+  },
+  "TargetOriginId": "Custom-letsencrypt-Origin-CreatedBy-SSLSentry",
+  "ViewerProtocolPolicy": "allow-all",
+  "ForwardedValues": {
+    "Headers": {
+      "Quantity": 0
+    },
+    "Cookies": {
+      "Forward": "none"
+    },
+    "QueryStringCacheKeys": {
+      "Quantity": 0
+    },
+    "QueryString": false
+  },
+  "MaxTTL": 31536000,
+  "PathPattern": "/.well-known/acme-challenge*",
+  "SmoothStreaming": false,
+  "DefaultTTL": 86400,
+  "AllowedMethods": {
+    "Items": [
+      "HEAD",
+      "GET"
+    ],
+    "CachedMethods": {
+      "Items": [
+        "HEAD",
+        "GET"
+      ],
+      "Quantity": 2
+    },
+    "Quantity": 2
+  },
+  "MinTTL": 0,
+  "Compress": false
+}

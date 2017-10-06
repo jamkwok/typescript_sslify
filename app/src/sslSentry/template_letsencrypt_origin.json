@@ -1,0 +1,23 @@
+{
+  "OriginPath": "",
+  "CustomOriginConfig": {
+    "OriginSslProtocols": {
+      "Items": [
+        "TLSv1",
+        "TLSv1.1",
+        "TLSv1.2"
+      ],
+      "Quantity": 3
+    },
+    "OriginProtocolPolicy": "http-only",
+    "OriginReadTimeout": 30,
+    "HTTPPort": 80,
+    "HTTPSPort": 443,
+    "OriginKeepaliveTimeout": 5
+  },
+  "CustomHeaders": {
+    "Quantity": 0
+  },
+  "Id": "Custom-letsencrypt-Origin-CreatedBy-SSLSentry",
+  "DomainName": "letsencrypt.siteminderlabs.com"
+}
