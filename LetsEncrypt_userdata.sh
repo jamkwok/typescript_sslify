@@ -7,11 +7,13 @@ add-apt-repository -y ppa:certbot/certbot
 apt-get update
 apt-get install -y python-certbot-nginx
 #Clone repo
-git clone https://github.com/jamkwok/terraform-aws.git
+git clone https://github.com/jamkwok/typescript_sslify.git
 #Npm install
-cd terraform-aws/letsencrypt_microservice
+cd typescript_sslify/app
 npm install
 npm install -g pm2
-pm2 start --name sslSentry /terraform-aws/letsencrypt_microservice/app.js
-echo "0 3 * * * /usr/bin/node /terraform-aws/letsencrypt_microservice/app_scrape.js" > crontab.txt
+npm install -g typescript
+npm install -g gulp
+pm2 start --name sslSentry /typescript_sslify/app/app.js
+echo "0 3 * * * /usr/bin/node /typescript_sslify/app/app_scrape.js" > crontab.txt
 crontab crontab.txt

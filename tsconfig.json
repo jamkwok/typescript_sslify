@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "compilerOptions": {
+        "lib": ["es5", "es6", "es7"],
+        "target": "es7",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
