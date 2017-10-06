@@ -1,15 +1,13 @@
 {
     "version": "1.0.0",
     "compilerOptions": {
-        "lib": ["es5", "es6", "es7"],
-        "target": "es7",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "sourceMap": true
+      "target": "es6",
+      "module": "commonjs"
     },
+    "include": [
+      "src/**/*.ts"
+    ],
     "exclude": [
-        "node_modules"
+      "node_modules"
     ]
 }

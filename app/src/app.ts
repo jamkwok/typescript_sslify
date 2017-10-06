@@ -1,24 +1,20 @@
 "use strict"
-// app.js
-//Required incase certificates are expired
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-// BASE SETUP
-// =============================================================================
-
 // Express Packages
-const express    = require('express');        // call express
-const app        = express();                 // define our app using express
-const bodyParser = require('body-parser');
-const methodOverride = require('method-override');
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as methodOverride from "method-override";
 
 // Application
-import { SslSentry } from "./src/sslSentry";
-import { SslScheduler } from "./src/sslScheduler";
+import { SslSentry } from "./src/SslSentry";
+import { SslScheduler } from "./src/SslScheduler";
 const sslSentry = new SslSentry();
 const sslScheduler = new SslScheduler();
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 // configure app to use bodyParser()
 // this will let us get the data from a POST
+const app  = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
