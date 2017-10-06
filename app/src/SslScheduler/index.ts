@@ -1,6 +1,6 @@
 "use strict";
 //Hardcoded to Virginia as ACM certs need to be there for cloudfront, cloudfront itself is global
-const AWS = require('aws-sdk');
+import * as AWS from "aws-sdk";
 //Needs to be changed
 const dyn = new AWS.DynamoDB({region: 'ap-southeast-2'});
 const env = require('./../../env.json');
@@ -10,9 +10,8 @@ const days_90 = 90*24*60*60*1000; //90 days - The expiry
 const days_31 = 31*24*60*60*1000; //31 days
 const days_30 = 30*24*60*60*1000; //30 days - Renew domains with expiries less than this
 
-module.exports = class sslScheduler {
-  constructor(options) {
-    this.options = options || {};
+export class sslScheduler {
+  constructor() {
     return this;
   }
 

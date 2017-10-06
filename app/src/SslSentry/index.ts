@@ -1,12 +1,13 @@
 "use strict";
-const cmd = require("node-cmd");
-const AWS = require('aws-sdk');
+import * as cmd from "node-cmd";
+import * as AWS from "aws-sdk";
+import * as rq from "request-promise";
+import * as jwt from "json-web-token";
+import * as fs from 'fs';
+
 //Hardcoded to Virginia as ACM certs need to be there for cloudfront, cloudfront itself is global
 const acm = new AWS.ACM({region: 'us-east-1'});
 const cf = new AWS.CloudFront({apiVersion: '2017-03-25'});
-const fs = require('fs');
-const rq = require('request-promise');
-const jwt = require('json-web-token');
 
 const env = require('./../../env.json');
 const environment = process.env.environment || 'dev';
@@ -24,9 +25,8 @@ const acmMaxResultsPerPage = '10';
 const cfMaxResultsPerPage = '10';
 const addLetsEncryptOriginWaitTime = 30000;
 
-module.exports = class sslSentry {
-  constructor(options) {
-    this.options = options || {};
+export class sslSentry {
+  constructor() {
     return this;
   }
 
