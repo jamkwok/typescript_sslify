@@ -30,7 +30,7 @@ export class sslSentry {
     return this;
   }
 
-  async httpSslify(domain) {
+  async httpSslify(domain: string): Promise<any> {
     try {
       let token = await this.encodeJwt();
       let header = await this.tokenToHeader(token);
@@ -51,7 +51,7 @@ export class sslSentry {
     }
   }
 
-  async headerToToken(header) {
+  async headerToToken(header: string): Promise<any> {
     return new Promise((resolve, reject) => {
       if (header.indexOf("Bearer") !== -1) {
         const token = header.split(' ')[1];
@@ -64,7 +64,7 @@ export class sslSentry {
     });
   }
 
-  async tokenToHeader(token) {
+  async tokenToHeader(token: string): Promise<any> {
     return new Promise((resolve, reject) => {
       if (token) {
         return resolve("Bearer " + token);
@@ -73,7 +73,7 @@ export class sslSentry {
     });
   }
 
-  async encodeJwt() {
+  async encodeJwt(): Promise<any> {
     return new Promise((resolve, reject) => {
       jwt.encode(jwtSecret, jwtSchema, (err, token) => {
         if (err) {
@@ -84,7 +84,7 @@ export class sslSentry {
     });
   }
 
-  async decodeJwt(token) {
+  async decodeJwt(token: string): Promise<any> {
     return new Promise((resolve, reject) => {
       jwt.decode(jwtSecret, token, (err, decodedPayload, decodedHeader) => {
         if (err) {
@@ -99,7 +99,7 @@ export class sslSentry {
     });
   }
 
-  async checkDomain(domain) {
+  async checkDomain(domain: string): Promise<any> {
     return rq('http://' + domain).catch(() => {
       //Transform http error into something more readable
       return new Promise((resolve, reject) => {
@@ -108,7 +108,7 @@ export class sslSentry {
     });
   }
 
-  async getCloudfrontDomainByDomain(domain) {
+  async getCloudfrontDomainByDomain(domain: string): Promise<any> {
     const cmdGetCloudfrontDomain = "dig " + domain + " grep 'CNAME' | grep 'cloudfront.net.' | awk -F'CNAME' '{ print $2}'"
     return new Promise((resolve, reject) => {
       cmd.get( cmdGetCloudfrontDomain, (err, data) => {
@@ -124,7 +124,7 @@ export class sslSentry {
     });
   }
 
-  async generateCerts(domain) {
+  async generateCerts(domain: string): Promise<any> {
     //Generates certs and returns the directory name they are located in.
     return new Promise((resolve, reject) => {
       cmd.run("rm -rf /etc/letsencrypt/archive/" + domain + "*");
@@ -149,7 +149,7 @@ export class sslSentry {
     })
   }
 
-  async getCertArn(domain) {
+  async getCertArn(domain: string): Promise<any> {
     try {
       let listOfAcmCerts = await this.listAcmCerts();
       const array = listOfAcmCerts.filter((certificateObject) => {
@@ -164,9 +164,9 @@ export class sslSentry {
     }
   }
 
-  async listAcmCerts(paginationToken) {
+  async listAcmCerts(paginationToken?: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      var params = {
+      var params: any = {
         CertificateStatuses: [ 'ISSUED', 'INACTIVE', 'EXPIRED' ],
         MaxItems: acmMaxResultsPerPage
       }
@@ -189,8 +189,8 @@ export class sslSentry {
     });
   }
 
-  async uploadCertsToAcm(certArn, certDir) {
-    const acmParam = {
+  async uploadCertsToAcm(certArn: string, certDir: string): Promise<any> {
+    const acmParam: any = {
       Certificate: fs.readFileSync('/etc/letsencrypt/live/' + certDir + '/cert.pem'),
       PrivateKey: fs.readFileSync('/etc/letsencrypt/live/' + certDir + '/privkey.pem'),
       CertificateChain: fs.readFileSync('/etc/letsencrypt/live/' + certDir + '/chain.pem')
@@ -209,7 +209,7 @@ export class sslSentry {
     });
   }
 
-  async getCloudfrontDistribution(domain) {
+  async getCloudfrontDistribution(domain: string): Promise<any> {
     try {
       let cloudfrontDistributionDomain = await this.getCloudfrontDomainByDomain(domain);
       let listOfCloudfrontDistributions = await this.listCloudfrontDistributions();
@@ -222,9 +222,9 @@ export class sslSentry {
     }
   }
 
-  async listCloudfrontDistributions(paginationToken) {
+  async listCloudfrontDistributions(paginationToken?: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      var params = {
+      var params: any = {
         MaxItems: cfMaxResultsPerPage
       }
 
@@ -246,7 +246,7 @@ export class sslSentry {
     });
   }
 
-  async getDistributionConfig(cloudfrontDistribution) {
+  async getDistributionConfig(cloudfrontDistribution: any): Promise<any> {
     return new Promise((resolve, reject) => {
       cf.getDistributionConfig({Id: cloudfrontDistribution.Id}, function(err, data) {
         if (err) {
@@ -257,7 +257,7 @@ export class sslSentry {
     })
   }
 
-  async updateCloudfrontDistributionToHttps(cloudfrontDistribution, certificateArn) {
+  async updateCloudfrontDistributionToHttps(cloudfrontDistribution: any, certificateArn: string): Promise<any> {
     const distributionConfig = await this.getDistributionConfig(cloudfrontDistribution);
     distributionConfig.DistributionConfig.ViewerCertificate = {
       CloudFrontDefaultCertificate: false,
@@ -280,7 +280,7 @@ export class sslSentry {
     });
   }
 
-  async addLetsEncryptOriginIfRequired(cloudfrontDistribution) {
+  async addLetsEncryptOriginIfRequired(cloudfrontDistribution: any): Promise<any> {
     const distributionConfig = await this.getDistributionConfig(cloudfrontDistribution);
     return new Promise((resolve, reject) => {
       if (distributionConfig.DistributionConfig.Origins.Items.filter((origin) => {

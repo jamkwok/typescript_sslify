@@ -15,7 +15,7 @@ export class sslScheduler {
     return this;
   }
 
-  async addDomain(domain) {
+  async addDomain(domain: string) {
     return new Promise((resolve, reject) => {
       if(!domain) {
         return reject({"status": "invalid domain"});
@@ -39,7 +39,7 @@ export class sslScheduler {
     });
   }
 
-  async updateDomainExpiry(domain) {
+  async updateDomainExpiry(domain: string) {
     //sets expiry +90 days
     return new Promise((resolve, reject) => {
       if(!domain) {
@@ -64,7 +64,7 @@ export class sslScheduler {
     });
   }
 
-  async removeDomain(domain) {
+  async removeDomain(domain: string) {
     return new Promise((resolve, reject) => {
       if(!domain) {
         return reject({"status": "invalid domain"});
@@ -85,27 +85,27 @@ export class sslScheduler {
     });
   }
 
-  async getDomainsToBeRenewed() {
+  async getDomainsToBeRenewed(): Promise<any> {
     const now_plus_30day = new Date(new Date().getTime()+days_30).toISOString();
     try {
       const allDomains = await this.listDynamoItems();
-      return allDomains.map((obj) => {
+      return Promise.resolve(allDomains.map((obj) => {
         return {
           Domain: obj.Domain.S,
           Expiry: obj.Expiry.S
         };
       }).filter((mappedObj) => {
         return mappedObj.Expiry < now_plus_30day;
-      });
+      }));
     } catch (err) {
       return Promise.reject({"status": "Unable to get list of domains"});
     }
   }
 
-  async listDynamoItems(LastEvaluatedKey) {
+  async listDynamoItems(LastEvaluatedKey?: any): Promise<any> {
     //scan all domains registered in dynamo
     return new Promise((resolve, reject) => {
-      var params = {
+      var params: any = {
         TableName: dataStore
       }
       if (LastEvaluatedKey) {
