@@ -298,8 +298,6 @@ export class SslSentry {
           delete distributionConfig['ETag'];
           distributionConfig.DistributionConfig.Origins.Quantity = originQuantity + 1;
           distributionConfig.DistributionConfig.CacheBehaviors.Quantity = cacheQuantity + 1;
-          console.log(templateLetsencryptOrigin)
-          console.log(templateLetsencryptCacheBehaviour);
           //Update LetsEncrypt Origin Domain
           templateLetsencryptOrigin.DomainName = letsEncryptOriginDomain;
           distributionConfig.DistributionConfig.Origins.Items.push(templateLetsencryptOrigin);

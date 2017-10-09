@@ -14,13 +14,13 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
-const app  = express();
+const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(methodOverride());
 
 // Get environment JSON.
-const env = require('./env.json');
+const env = require('./../env.json');
 const environment = process.env.environment || 'dev';
 const port = process.env.PORT || env[environment].port;        // set our port
 
