@@ -21,8 +21,8 @@ const templateLetsencryptCacheBehaviour = require("./template_letsencrypt_cache_
 const templateLetsencryptOrigin = require("./template_letsencrypt_origin.json");
 
 //Constants
-const acmMaxResultsPerPage = '10';
-const cfMaxResultsPerPage = '10';
+const acmMaxResultsPerPage = '1000';
+const cfMaxResultsPerPage = '100';
 const addLetsEncryptOriginWaitTime = 30000;
 
 export class SslSentry {
