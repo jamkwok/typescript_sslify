@@ -14,6 +14,9 @@ npm install
 npm install -g pm2
 npm install -g typescript
 npm install -g gulp
+#compile typescript
+tsc
+#start app
 pm2 start --name sslSentry /typescript_sslify/app/app.js
 echo "0 3 * * * /usr/bin/node /typescript_sslify/app/app_scrape.js" > crontab.txt
 crontab crontab.txt
