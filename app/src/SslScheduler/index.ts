@@ -5,6 +5,7 @@ import * as AWS from "aws-sdk";
 const env = require('./../../env.json');
 const environment = process.env.environment || 'dev';
 const awsRole = env[environment].awsRole;
+const awsRegion = env[environment].awsRegion;
 const dataStore = env[environment].dataStore;
 const days_90 = 90*24*60*60*1000; //90 days - The expiry
 const days_31 = 31*24*60*60*1000; //31 days
@@ -15,7 +16,7 @@ export class SslScheduler {
 
   constructor(awsCrossRoleCredentials: any) {
     //reinstantiate AWS
-    this.dyn = new AWS.DynamoDB(awsCrossRoleCredentials);
+    this.dyn = new AWS.DynamoDB({credentials: awsCrossRoleCredentials, region: awsRegion});
     return this;
   }
 

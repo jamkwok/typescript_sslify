@@ -7,6 +7,7 @@ import * as rq from "request-promise";
 const env = require('./../../env.json');
 const environment = process.env.environment || 'dev';
 const port = process.env.PORT || env[environment].port;        // set our port
+const awsRegion = env[environment].awsRegion;
 const letsEncryptOriginDomain = env[environment].letsencryptOrigin;
 
 //Cloudfront Json Templates
@@ -24,12 +25,8 @@ export class SslSentry {
 
   constructor(awsCrossRoleCredentials: any) {
     //Hardcoded to Virginia as ACM certs need to be there for cloudfront, cloudfront itself is global
-    let acmCredentials = awsCrossRoleCredentials;
-    let cfCredentials = awsCrossRoleCredentials;
-    acmCredentials.region = 'us-east-1';
-    cfCredentials.apiVersion = '2017-03-25';
-    this.acm = new AWS.ACM(acmCredentials);
-    this.cf = new AWS.CloudFront(cfCredentials);
+    this.acm = new AWS.ACM({credentials: awsCrossRoleCredentials, region: 'us-east-1'});
+    this.cf = new AWS.CloudFront({credentials: awsCrossRoleCredentials, region: awsRegion, apiVersion: '2017-03-25'});
     return this;
   }
 
