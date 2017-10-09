@@ -5,10 +5,6 @@ import * as rq from "request-promise";
 import * as jwt from "json-web-token";
 import * as fs from 'fs';
 
-//Hardcoded to Virginia as ACM certs need to be there for cloudfront, cloudfront itself is global
-const acm = new AWS.ACM({region: 'us-east-1'});
-const cf = new AWS.CloudFront({apiVersion: '2017-03-25'});
-
 const env = require('./../../env.json');
 const environment = process.env.environment || 'dev';
 const port = process.env.PORT || env[environment].port;        // set our port
@@ -26,7 +22,13 @@ const cfMaxResultsPerPage = '100';
 const addLetsEncryptOriginWaitTime = 30000;
 
 export class SslSentry {
+  private acm: any;
+  private cf: any;
+
   constructor() {
+    //Hardcoded to Virginia as ACM certs need to be there for cloudfront, cloudfront itself is global
+    this.acm = new AWS.ACM({region: 'us-east-1'});
+    this.cf = new AWS.CloudFront({apiVersion: '2017-03-25'});
     return this;
   }
 
@@ -175,7 +177,7 @@ export class SslSentry {
         params.NextToken = paginationToken;
       }
 
-      acm.listCertificates(params, (err, data) => {
+      this.acm.listCertificates(params, (err, data) => {
         if (err) {
           return reject({"status": "error listing certificates"});
         }
@@ -200,7 +202,7 @@ export class SslSentry {
     }
 
     return new Promise((resolve, reject) => {
-      acm.importCertificate(acmParam, function(err, data) {
+      this.acm.importCertificate(acmParam, function(err, data) {
         if (err) {
           return reject({"status": "failed loading new certificates"});
         }
@@ -232,7 +234,7 @@ export class SslSentry {
         params.Marker = paginationToken;
       }
 
-      cf.listDistributions(params, (err, data) => {
+      this.cf.listDistributions(params, (err, data) => {
         if (err) {
           return reject({"status": "failed listing Cloudfront Distributions"});
         }
@@ -248,7 +250,7 @@ export class SslSentry {
 
   async getDistributionConfig(cloudfrontDistribution: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      cf.getDistributionConfig({Id: cloudfrontDistribution.Id}, function(err, data) {
+      this.cf.getDistributionConfig({Id: cloudfrontDistribution.Id}, function(err, data) {
         if (err) {
           return reject({"status": "Cant find cloudfront distribution by given id"});
         }
@@ -271,7 +273,7 @@ export class SslSentry {
     delete distributionConfig['ETag'];
     console.log(distributionConfig);
     return new Promise((resolve, reject) => {
-      cf.updateDistribution(distributionConfig, (err, data) => {
+      this.cf.updateDistribution(distributionConfig, (err, data) => {
         if (err) {
           return reject({"status": "failed to update SSL"});
         }
@@ -305,7 +307,7 @@ export class SslSentry {
         } catch (err) {
           return reject({"status": "failed to modify origin"});
         }
-        cf.updateDistribution(distributionConfig, (err, data) => {
+        this.cf.updateDistribution(distributionConfig, (err, data) => {
           if (err) {
             return reject({"status": "failed to add origin"});
           }

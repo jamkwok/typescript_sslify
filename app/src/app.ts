@@ -7,8 +7,6 @@ import * as methodOverride from "method-override";
 // Application
 import { SslSentry } from "./SslSentry";
 import { SslScheduler } from "./SslScheduler";
-const sslSentry = new SslSentry();
-const sslScheduler = new SslScheduler();
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -35,6 +33,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/renewals', (req, res) => {
+  const sslSentry = new SslSentry();
+  const sslScheduler = new SslScheduler();
   const header = req.get("Authorization");
   const domain = req.body.Domain;
   //extract header Jwt Token
@@ -53,6 +53,8 @@ router.post('/add', (req, res) => {
   if (!req.body.Domain) {
       return res.json({ "status": "Domain not in payload" });
   }
+  const sslSentry = new SslSentry();
+  const sslScheduler = new SslScheduler();
   const header = req.get("Authorization");
   const domain = req.body.Domain;
   //extract header Jwt Token
@@ -71,6 +73,8 @@ router.post('/remove', (req, res) => {
   if (!req.body.Domain) {
       return res.json({ "status": "Domain not in payload" });
   }
+  const sslSentry = new SslSentry();
+  const sslScheduler = new SslScheduler();
   const header = req.get("Authorization");
   const domain = req.body.Domain;
   //extract header Jwt Token
@@ -86,10 +90,11 @@ router.post('/remove', (req, res) => {
 });
 
 router.post('/sslify', (req, res) => {
-  console.log(req.body);
   if (!req.body.Domain) {
       return res.json({ "status": "Domain not in payload" });
   }
+  const sslSentry = new SslSentry();
+  const sslScheduler = new SslScheduler();
   const header = req.get("Authorization");
   const domain = req.body.Domain;
   let certDir, certificateArn;

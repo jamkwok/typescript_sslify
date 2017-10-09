@@ -2,7 +2,6 @@
 //Hardcoded to Virginia as ACM certs need to be there for cloudfront, cloudfront itself is global
 import * as AWS from "aws-sdk";
 //Needs to be changed
-const dyn = new AWS.DynamoDB({region: 'ap-southeast-2'});
 const env = require('./../../env.json');
 const environment = process.env.environment || 'dev';
 const dataStore = env[environment].dataStore;
@@ -11,7 +10,11 @@ const days_31 = 31*24*60*60*1000; //31 days
 const days_30 = 30*24*60*60*1000; //30 days - Renew domains with expiries less than this
 
 export class SslScheduler {
+  private dyn: any;
+
   constructor() {
+    //reinstantiate AWS
+    this.dyn = new AWS.DynamoDB({region: 'ap-southeast-2'});
     return this;
   }
 
@@ -20,7 +23,7 @@ export class SslScheduler {
       if(!domain) {
         return reject({"status": "invalid domain"});
       }
-      dyn.putItem({
+      this.dyn.putItem({
         Item: {
          "Domain": {
            S: domain
@@ -45,7 +48,7 @@ export class SslScheduler {
       if(!domain) {
         return reject({"status": "invalid domain"});
       }
-      dyn.putItem({
+      this.dyn.putItem({
         Item: {
          "Domain": {
            S: domain
@@ -69,7 +72,7 @@ export class SslScheduler {
       if(!domain) {
         return reject({"status": "invalid domain"});
       }
-      dyn.deleteItem({
+      this.dyn.deleteItem({
         Key: {
          "Domain": {
            S: domain
@@ -111,7 +114,7 @@ export class SslScheduler {
       if (LastEvaluatedKey) {
         params.ExclusiveStartKey = LastEvaluatedKey;
       }
-      dyn.scan(params, (err, data) => {
+      this.dyn.scan(params, (err, data) => {
         if (err) {
           return reject({"status": "error getting records from datastore"});
         }
