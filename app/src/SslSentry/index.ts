@@ -218,7 +218,7 @@ export class SslSentry {
         return (cloudfrontObject.DomainName === cloudfrontDistributionDomain) && (cloudfrontObject.Aliases.Items.indexOf(domain) !== -1);
       })[0];
     } catch (error) {
-      return Promise.reject({"status": "failed listing Cloudfront Distributions"});
+      return Promise.reject({"status": "failed listing Cloudfront Distributions perhaps due to invalid domain"});
     }
   }
 
