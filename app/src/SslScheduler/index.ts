@@ -10,7 +10,7 @@ const days_90 = 90*24*60*60*1000; //90 days - The expiry
 const days_31 = 31*24*60*60*1000; //31 days
 const days_30 = 30*24*60*60*1000; //30 days - Renew domains with expiries less than this
 
-export class sslScheduler {
+export class SslScheduler {
   constructor() {
     return this;
   }

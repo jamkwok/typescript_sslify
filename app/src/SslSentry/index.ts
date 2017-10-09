@@ -25,7 +25,7 @@ const acmMaxResultsPerPage = '10';
 const cfMaxResultsPerPage = '10';
 const addLetsEncryptOriginWaitTime = 30000;
 
-export class sslSentry {
+export class SslSentry {
   constructor() {
     return this;
   }

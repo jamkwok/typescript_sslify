@@ -5,8 +5,8 @@ import * as bodyParser from "body-parser";
 import * as methodOverride from "method-override";
 
 // Application
-import * as SslSentry from "./SslSentry";
-import * as SslScheduler from "./SslScheduler";
+import { SslSentry } from "./SslSentry";
+import { SslScheduler } from "./SslScheduler";
 const sslSentry = new SslSentry();
 const sslScheduler = new SslScheduler();
 
