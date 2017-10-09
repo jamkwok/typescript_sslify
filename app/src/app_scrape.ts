@@ -6,10 +6,10 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 // =============================================================================
 
 // Application
-const SslSentry = require("./src/sslSentry");
+// Application
+import { SslSentry } from "./SslSentry";
+import { SslScheduler } from "./SslScheduler";
 const sslSentry = new SslSentry();
-
-const SslScheduler = require("./src/sslScheduler");
 const sslScheduler = new SslScheduler();
 
 let scrape = async () => {
