@@ -23,7 +23,6 @@ const env = require('./../env.json');
 const environment = process.env.environment || 'dev';
 const port = process.env.PORT || env[environment].port;        // set our port
 
-
 // ROUTES FOR OUR API
 // =============================================================================
 const router = express.Router();              // get an instance of the express Router
@@ -47,9 +46,9 @@ router.get('/renewals', (req, res) => {
     sslSentry = new SslSentry(credentials);
     sslScheduler = new SslScheduler(credentials);
     //extract header Jwt Token
-    return sslSentry.headerToToken(header);
+    return utils.headerToToken(header);
   }).then((token) => {
-    return sslSentry.decodeJwt(token);
+    return utils.decodeJwt(token);
   }).then(() => {
     return sslScheduler.getDomainsToBeRenewed();
   }).then((data) => {
@@ -74,9 +73,9 @@ router.post('/add', (req, res) => {
     sslSentry = new SslSentry(credentials);
     sslScheduler = new SslScheduler(credentials);
     //extract header Jwt Token
-    return sslSentry.headerToToken(header);
+    return utils.headerToToken(header);
   }).then((token) => {
-    return sslSentry.decodeJwt(token);
+    return utils.decodeJwt(token);
   }).then(() => {
     return sslScheduler.addDomain(domain);
   }).then((data) => {
@@ -101,9 +100,9 @@ router.post('/remove', (req, res) => {
     sslSentry = new SslSentry(credentials);
     sslScheduler = new SslScheduler(credentials);
     //extract header Jwt Token
-    return sslSentry.headerToToken(header);
+    return utils.headerToToken(header);
   }).then((token) => {
-    return sslSentry.decodeJwt(token);
+    return utils.decodeJwt(token);
   }).then(() => {
     return sslScheduler.removeDomain(domain);
   }).then((data) => {
@@ -126,9 +125,9 @@ router.post('/sslify', (req, res) => {
     sslSentry = new SslSentry(credentials);
     sslScheduler = new SslScheduler(credentials);
     //extract header Jwt Token
-    return sslSentry.headerToToken(header);
+    return utils.headerToToken(header);
   }).then((token) => {
-    return sslSentry.decodeJwt(token);
+    return utils.decodeJwt(token);
   }).then(() => {
     // Check domain is connected to website
     return sslSentry.checkDomain(domain);
@@ -136,6 +135,7 @@ router.post('/sslify', (req, res) => {
     //Search by ( www.jameskwok.com --> ABC.cloudfront.net ) to get Distribution Object
     return sslSentry.getCloudfrontDistribution(domain);
   }).then((cloudfrontDistribution) => {
+    console.log(cloudfrontDistribution);
     //Add LetsEncrypt Origin
     return sslSentry.addLetsEncryptOriginIfRequired(cloudfrontDistribution);
   }).then((data) => {

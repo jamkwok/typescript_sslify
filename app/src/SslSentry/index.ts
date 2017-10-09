@@ -67,7 +67,6 @@ export class SslSentry {
         if(err) {
           return reject({"status": "Error running certbot"});
         }
-        console.log(err,data);
         return resolve(data);
       });
     }).then((data) => {
@@ -92,7 +91,7 @@ export class SslSentry {
       if (array.length > 0) {
         return array[0].CertificateArn;
       }
-      return '';
+      return Promise.resolve();
     } catch (error) {
       return Promise.reject({"status": "error in aws list certs for acm"});
     }

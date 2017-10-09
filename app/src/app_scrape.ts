@@ -13,9 +13,13 @@ import { SslScheduler } from "./SslScheduler";
 let sslSentry, sslScheduler;
 let scrape = async () => {
   const utils = new Utils();
-  let stsCredentials = await utils.getStsCredentials();
-  sslSentry = new SslSentry(stsCredentials);
-  sslScheduler = new SslScheduler(stsCredentials);
+  try {
+    let stsCredentials = await utils.getStsCredentials();
+    sslSentry = new SslSentry(stsCredentials);
+    sslScheduler = new SslScheduler(stsCredentials);
+  } catch (err) {
+    console.log(err);
+  }
   let domains = await sslScheduler.getDomainsToBeRenewed();
   for (let domainObj of domains) {
     const status = await sslSentry.httpSslify(domainObj.Domain);
