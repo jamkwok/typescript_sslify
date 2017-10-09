@@ -1,15 +1,12 @@
 "use strict";
 import * as cmd from "node-cmd";
 import * as AWS from "aws-sdk";
-import * as rq from "request-promise";
-import * as jwt from "json-web-token";
 import * as fs from 'fs';
+import * as rq from "request-promise";
 
 const env = require('./../../env.json');
 const environment = process.env.environment || 'dev';
 const port = process.env.PORT || env[environment].port;        // set our port
-const jwtSchema = env[environment].jwtSchema;
-const jwtSecret = env[environment].jwtSecret;
 const letsEncryptOriginDomain = env[environment].letsencryptOrigin;
 
 //Cloudfront Json Templates
@@ -25,80 +22,15 @@ export class SslSentry {
   private acm: any;
   private cf: any;
 
-  constructor() {
+  constructor(awsCrossRoleCredentials: any) {
     //Hardcoded to Virginia as ACM certs need to be there for cloudfront, cloudfront itself is global
-    this.acm = new AWS.ACM({region: 'us-east-1'});
-    this.cf = new AWS.CloudFront({apiVersion: '2017-03-25'});
+    let acmCredentials = awsCrossRoleCredentials;
+    let cfCredentials = awsCrossRoleCredentials;
+    acmCredentials.region = 'us-east-1';
+    cfCredentials.apiVersion = '2017-03-25';
+    this.acm = new AWS.ACM(acmCredentials);
+    this.cf = new AWS.CloudFront(cfCredentials);
     return this;
-  }
-
-  async httpSslify(domain: string): Promise<any> {
-    try {
-      let token = await this.encodeJwt();
-      let header = await this.tokenToHeader(token);
-      //Send http request-promise
-      return (await rq({
-        method: 'POST',
-        uri: 'http://localhost:' + port + '/api/sslify',
-        headers: {
-          Authorization: header
-        },
-        body: {
-          Domain: domain
-        },
-        json: true
-      }));
-    } catch (err) {
-      return Promise.reject({ "status": "Failed to sslify domain"});
-    }
-  }
-
-  async headerToToken(header: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (header.indexOf("Bearer") !== -1) {
-        const token = header.split(' ')[1];
-        if(token) {
-            return resolve(token);
-        }
-        return reject({ "status": "token not found"});
-      }
-      return reject({ "status": "failed to extract token"});
-    });
-  }
-
-  async tokenToHeader(token: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      if (token) {
-        return resolve("Bearer " + token);
-      }
-      return reject({ "status": "failed to create token header"});
-    });
-  }
-
-  async encodeJwt(): Promise<any> {
-    return new Promise((resolve, reject) => {
-      jwt.encode(jwtSecret, jwtSchema, (err, token) => {
-        if (err) {
-          return reject({"status": "failed to encode"});
-        }
-        return resolve(token);
-      });
-    });
-  }
-
-  async decodeJwt(token: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      jwt.decode(jwtSecret, token, (err, decodedPayload, decodedHeader) => {
-        if (err) {
-          return reject({"status": "failure to decode"});
-        }
-        if (decodedPayload.application === 'sslSentry') {
-          //schema validated
-          return resolve(decodedPayload);
-        }
-        return reject({"status": "failed to validate jwt schema"});
-      });
-    });
   }
 
   async checkDomain(domain: string): Promise<any> {

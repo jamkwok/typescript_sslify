@@ -5,6 +5,7 @@ import * as bodyParser from "body-parser";
 import * as methodOverride from "method-override";
 
 // Application
+import { Utils } from "./Utils";
 import { SslSentry } from "./SslSentry";
 import { SslScheduler } from "./SslScheduler";
 
@@ -28,17 +29,26 @@ const port = process.env.PORT || env[environment].port;        // set our port
 const router = express.Router();              // get an instance of the express Router
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+//Declare Aws Variables
+
 router.get('/', (req, res) => {
   res.json({ "status": "Success" });
 });
 
 router.get('/renewals', (req, res) => {
-  const sslSentry = new SslSentry();
-  const sslScheduler = new SslScheduler();
+  let sslSentry, sslScheduler;
+  //const sslSentry = new SslSentry();
+  //const sslScheduler = new SslScheduler();
   const header = req.get("Authorization");
   const domain = req.body.Domain;
-  //extract header Jwt Token
-  sslSentry.headerToToken(header).then((token) => {
+  const utils = new Utils();
+  let certDir, certificateArn;
+  return utils.getStsCredentials().then((credentials) => {
+    sslSentry = new SslSentry(credentials);
+    sslScheduler = new SslScheduler(credentials);
+    //extract header Jwt Token
+    return sslSentry.headerToToken(header);
+  }).then((token) => {
     return sslSentry.decodeJwt(token);
   }).then(() => {
     return sslScheduler.getDomainsToBeRenewed();
@@ -53,12 +63,19 @@ router.post('/add', (req, res) => {
   if (!req.body.Domain) {
       return res.json({ "status": "Domain not in payload" });
   }
-  const sslSentry = new SslSentry();
-  const sslScheduler = new SslScheduler();
+  let sslSentry, sslScheduler;
+  //const sslSentry = new SslSentry();
+  //const sslScheduler = new SslScheduler();
   const header = req.get("Authorization");
   const domain = req.body.Domain;
-  //extract header Jwt Token
-  sslSentry.headerToToken(header).then((token) => {
+  const utils = new Utils();
+  let certDir, certificateArn;
+  return utils.getStsCredentials().then((credentials) => {
+    sslSentry = new SslSentry(credentials);
+    sslScheduler = new SslScheduler(credentials);
+    //extract header Jwt Token
+    return sslSentry.headerToToken(header);
+  }).then((token) => {
     return sslSentry.decodeJwt(token);
   }).then(() => {
     return sslScheduler.addDomain(domain);
@@ -73,12 +90,19 @@ router.post('/remove', (req, res) => {
   if (!req.body.Domain) {
       return res.json({ "status": "Domain not in payload" });
   }
-  const sslSentry = new SslSentry();
-  const sslScheduler = new SslScheduler();
+  let sslSentry, sslScheduler;
+  //const sslSentry = new SslSentry();
+  //const sslScheduler = new SslScheduler();
   const header = req.get("Authorization");
   const domain = req.body.Domain;
-  //extract header Jwt Token
-  sslSentry.headerToToken(header).then((token) => {
+  const utils = new Utils();
+  let certDir, certificateArn;
+  return utils.getStsCredentials().then((credentials) => {
+    sslSentry = new SslSentry(credentials);
+    sslScheduler = new SslScheduler(credentials);
+    //extract header Jwt Token
+    return sslSentry.headerToToken(header);
+  }).then((token) => {
     return sslSentry.decodeJwt(token);
   }).then(() => {
     return sslScheduler.removeDomain(domain);
@@ -93,13 +117,17 @@ router.post('/sslify', (req, res) => {
   if (!req.body.Domain) {
       return res.json({ "status": "Domain not in payload" });
   }
-  const sslSentry = new SslSentry();
-  const sslScheduler = new SslScheduler();
+  let sslSentry, sslScheduler;
   const header = req.get("Authorization");
   const domain = req.body.Domain;
+  const utils = new Utils();
   let certDir, certificateArn;
-  //extract header Jwt Token
-  sslSentry.headerToToken(header).then((token) => {
+  return utils.getStsCredentials().then((credentials) => {
+    sslSentry = new SslSentry(credentials);
+    sslScheduler = new SslScheduler(credentials);
+    //extract header Jwt Token
+    return sslSentry.headerToToken(header);
+  }).then((token) => {
     return sslSentry.decodeJwt(token);
   }).then(() => {
     // Check domain is connected to website

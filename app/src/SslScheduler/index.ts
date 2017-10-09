@@ -4,6 +4,7 @@ import * as AWS from "aws-sdk";
 //Needs to be changed
 const env = require('./../../env.json');
 const environment = process.env.environment || 'dev';
+const awsRole = env[environment].awsRole;
 const dataStore = env[environment].dataStore;
 const days_90 = 90*24*60*60*1000; //90 days - The expiry
 const days_31 = 31*24*60*60*1000; //31 days
@@ -12,9 +13,9 @@ const days_30 = 30*24*60*60*1000; //30 days - Renew domains with expiries less t
 export class SslScheduler {
   private dyn: any;
 
-  constructor() {
+  constructor(awsCrossRoleCredentials: any) {
     //reinstantiate AWS
-    this.dyn = new AWS.DynamoDB({region: 'ap-southeast-2'});
+    this.dyn = new AWS.DynamoDB(awsCrossRoleCredentials);
     return this;
   }
 
