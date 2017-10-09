@@ -110,10 +110,11 @@ resource "aws_iam_policy" "letsencrypt_policy" {
 "Statement": [
   {
     "Action": [
-      "acm:*",
-      "cloudfront:*",
-      "route53:*",
-      "dynamodb:*"
+      //"acm:*",
+      //"cloudfront:*",
+      //"route53:*",
+      //"dynamodb:*"
+      "sts:AssumeRole"
     ],
     "Effect": "Allow",
     "Resource": "*"

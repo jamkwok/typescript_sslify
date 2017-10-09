@@ -1,4 +1,4 @@
-region = "oregon"
+region = "sydney"
 sshKey = "James.Kwok"
 //myIp = "0.0.0.0/0"
 myIp = "210.10.203.133/32"
