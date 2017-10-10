@@ -80,6 +80,7 @@ export class SslSentry {
       return new Promise((resolve, reject) => {
         cmd.get( cmdGetDir, (err, data) => {
           if (err) {
+            console.log(err);
             return reject({"status": "failed to get certificate directory"});
           }
           return resolve(data.replace(/(\r\n|\n|\r)/gm,""));
@@ -141,6 +142,7 @@ export class SslSentry {
     return new Promise((resolve, reject) => {
       this.acm.importCertificate(acmParam, function(err, data) {
         if (err) {
+          console.log(err);
           return reject({"status": "failed loading new certificates"});
         }
         return resolve(data.CertificateArn);
@@ -195,6 +197,7 @@ export class SslSentry {
     return new Promise((resolve, reject) => {
       this.cf.getDistributionConfig({Id: cloudfrontDistribution.Id}, function(err, data) {
         if (err) {
+          console.log(err);
           return reject({"status": "Cant find cloudfront distribution by given id"});
         }
         return resolve(data);
@@ -218,6 +221,7 @@ export class SslSentry {
     return new Promise((resolve, reject) => {
       this.cf.updateDistribution(distributionConfig, (err, data) => {
         if (err) {
+          console.log(err);
           return reject({"status": "failed to update SSL"});
         }
         return resolve(data);
@@ -248,10 +252,12 @@ export class SslSentry {
           distributionConfig.DistributionConfig.Origins.Items.push(templateLetsencryptOrigin);
           distributionConfig.DistributionConfig.CacheBehaviors.Items.push(templateLetsencryptCacheBehaviour);
         } catch (err) {
+          console.log(err);
           return reject({"status": "failed to modify origin"});
         }
         this.cf.updateDistribution(distributionConfig, (err, data) => {
           if (err) {
+            console.log(err);
             return reject({"status": "failed to add origin"});
           }
           setTimeout(() => { return resolve(data); }, addLetsEncryptOriginWaitTime);
