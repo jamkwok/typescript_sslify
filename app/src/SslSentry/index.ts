@@ -26,9 +26,11 @@ export class SslSentry {
     // Hardcoded to Virginia as ACM certs need to be there for cloudfront, cloudfront itself is global
     // No credentials default to same account and not cross acount
     if(awsCrossRoleCredentials) {
+      console.log("Cross Account Role being used");
       this.acm = new AWS.ACM({credentials: awsCrossRoleCredentials, region: 'us-east-1'});
       this.cf = new AWS.CloudFront({credentials: awsCrossRoleCredentials, apiVersion: '2017-03-25'});
     } else {
+      console.log("Same Account Role being used");
       this.acm = new AWS.ACM({region: 'us-east-1'});
       this.cf = new AWS.CloudFront({apiVersion: '2017-03-25'});
     }
