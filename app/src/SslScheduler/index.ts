@@ -42,6 +42,7 @@ export class SslScheduler {
         TableName: dataStore
       }, (err, data) => {
        if (err) {
+         console.log(err);
          return reject({"status": "failed to add domain in Dynamo"});
        }
        return resolve({"status": "successfully added domain in Dynamo"});
@@ -67,6 +68,7 @@ export class SslScheduler {
         TableName: dataStore
       }, (err, data) => {
        if (err) {
+         console.log(err);
          return reject({"status": "failed to update domain in Dynamo"});
        }
        return resolve({"status": "successfully updated domain in Dynamo"});
@@ -88,6 +90,7 @@ export class SslScheduler {
         TableName: dataStore
       }, (err, data) => {
        if (err) {
+         console.log(err);
          return reject({"status": "failed to remove domain in Dynamo"});
        }
        return resolve({"status": "successfully removed domain in Dynamo"});
@@ -108,6 +111,7 @@ export class SslScheduler {
         return mappedObj.Expiry < now_plus_30day;
       }));
     } catch (err) {
+      console.log(err);
       return Promise.reject({"status": "Unable to get list of domains"});
     }
   }
@@ -123,6 +127,7 @@ export class SslScheduler {
       }
       this.dyn.scan(params, (err, data) => {
         if (err) {
+          console.log(err);
           return reject({"status": "error getting records from datastore"});
         }
         if (data.LastEvaluatedKey) {
