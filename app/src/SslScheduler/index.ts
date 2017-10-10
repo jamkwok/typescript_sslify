@@ -16,8 +16,10 @@ export class SslScheduler {
   constructor(awsCrossRoleCredentials: any) {
     //reinstantiate AWS
     if(awsCrossRoleCredentials) {
+      console.log("Cross Account Role being used");
       this.dyn = new AWS.DynamoDB({credentials: awsCrossRoleCredentials, region: awsRegion});
     } else {
+      console.log("Same Account Role being used");
       this.dyn = new AWS.DynamoDB({region: awsRegion});
     }
     return this;

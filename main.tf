@@ -1,4 +1,3 @@
-provider "aws" {}
 
 variable "myIp" {
   type = "string"
@@ -24,6 +23,11 @@ variable "dynamoWriteCap" {
   type = "string"
 }
 
+variable "dynamoDbName" {
+  type = "string"
+}
+
+
 module "ec2" {
   myIp = "${var.myIp}"
   sshKey = "${var.sshKey}"
@@ -35,5 +39,6 @@ module "ec2" {
 module "dynamo" {
   dynamoReadCap = "${var.dynamoReadCap}"
   dynamoWriteCap = "${var.dynamoWriteCap}"
+  dynamoDbName = "${var.dynamoDbName}"
   source = "./dynamo"
 }

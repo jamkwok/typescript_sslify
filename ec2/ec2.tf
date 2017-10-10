@@ -32,6 +32,10 @@ variable "availabilityZones" {
   }
 }
 
+provider "aws" {
+  region = "${var.regionId}"
+}
+
 resource "aws_security_group" "allow_ssh_http" {
   name        = "allow_ssh_http"
   description = "Allow all inbound traffic"

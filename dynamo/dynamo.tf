@@ -7,6 +7,10 @@ variable "dynamoWriteCap" {
   type = "string"
 }
 
+variable "dynamoDbName" {
+  type = "string"
+}
+
 //Mapping
 variable "regionId" {
   type = "map"
@@ -21,6 +25,10 @@ variable "availabilityZones" {
     sydney = "ap-southeast-2a"
     oregon = "us-west-2a"
   }
+}
+
+provider "aws" {
+  region = "${var.regionId}"
 }
 
 resource "aws_dynamodb_table" "sslSentry" {
