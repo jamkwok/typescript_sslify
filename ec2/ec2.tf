@@ -101,10 +101,6 @@ resource "aws_iam_instance_profile" "letsencrypt_role_profile" {
 }
 
 
-//"acm:*",
-//"cloudfront:*",
-//"route53:*",
-//"dynamodb:*"
 resource "aws_iam_policy" "letsencrypt_policy" {
   name        = "letsencrypt_policy"
   path        = "/"
@@ -115,6 +111,10 @@ resource "aws_iam_policy" "letsencrypt_policy" {
 "Statement": [
   {
     "Action": [
+      "acm:*",
+      "cloudfront:*",
+      "route53:*",
+      "dynamodb:*",
       "sts:AssumeRole"
     ],
     "Effect": "Allow",
