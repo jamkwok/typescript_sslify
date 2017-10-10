@@ -29,6 +29,7 @@ variable "dynamoDbName" {
 
 
 module "ec2" {
+  region = "${var.region}"
   myIp = "${var.myIp}"
   sshKey = "${var.sshKey}"
   region = "${var.region}"
@@ -37,6 +38,7 @@ module "ec2" {
 }
 
 module "dynamo" {
+  region = "${var.region}"
   dynamoReadCap = "${var.dynamoReadCap}"
   dynamoWriteCap = "${var.dynamoWriteCap}"
   dynamoDbName = "${var.dynamoDbName}"

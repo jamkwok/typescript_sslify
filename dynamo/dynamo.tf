@@ -1,4 +1,8 @@
 
+variable "region" {
+  type = "string"
+}
+
 variable "dynamoReadCap" {
   type = "string"
 }
@@ -28,7 +32,7 @@ variable "availabilityZones" {
 }
 
 provider "aws" {
-  region = "${var.regionId}"
+  region = "${lookup(var.regionId, var.region)}"
 }
 
 resource "aws_dynamodb_table" "sslSentry" {

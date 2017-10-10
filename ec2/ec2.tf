@@ -11,10 +11,6 @@ variable "sshKey" {
   type = "string"
 }
 
-variable "region" {
-  type = "string"
-}
-
 variable "dnsApex" {
   type = "string"
 }
@@ -37,7 +33,7 @@ variable "availabilityZones" {
 }
 
 provider "aws" {
-  region = ${lookup(var.regionId, var.region)}"
+  region = "${lookup(var.regionId, var.region)}"
 }
 
 resource "aws_security_group" "allow_ssh_http" {
@@ -140,7 +136,7 @@ resource "aws_iam_role_policy_attachment" "letsencrypt_role_attach" {
 
 resource "aws_instance" "LetsEncrypt" {
   depends_on = ["aws_security_group.allow_ssh_http","aws_iam_role.letsencrypt_role","aws_iam_instance_profile.letsencrypt_role_profile"]
-  ami           = "ami-e2021d81"
+  ami           = "ami-6e1a0117"
   availability_zone = "${lookup(var.availabilityZones, var.region)}"
   key_name = "${var.sshKey}"
   instance_type = "t2.nano"
