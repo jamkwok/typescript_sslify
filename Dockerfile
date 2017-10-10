@@ -6,7 +6,7 @@ MAINTAINER James Kwok: 0.1
 #Install Dependencies
 RUN apt-get update
 RUN apt-get install -y nginx python awscli ntp curl
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
 RUN add-apt-repository -y ppa:certbot/certbot
 RUN apt-get update
@@ -19,4 +19,4 @@ RUN echo "0 3 * * * /usr/bin/node /typescript_sslify/app/src/app_scrape.js" > cr
 
 EXPOSE 80 3000
 
-CMD cron && node /root/app/src/app.js
+CMD cron && /usr/bin/node /root/app/src/app.js
