@@ -29,8 +29,11 @@ export class Utils {
         if (err) {
           return reject({"status": "Unable to acquire AWS STS credentials"});
         }
-        console.log(data.Credentials);
-        return resolve(data.Credentials);           // successful response
+        return resolve(new AWS.Credentials({
+          accessKeyId: data.Credentials.AccessKeyId,
+          secretAccessKey: data.Credentials.SecretAccessKey,
+          sessionToken: data.Credentials.SessionToken
+        }));
       });
     });
   }
