@@ -42,9 +42,9 @@ export class SslScheduler {
         TableName: dataStore
       }, (err, data) => {
        if (err) {
-         return reject({"status": "failed to add domain"});
+         return reject({"status": "failed to add domain in Dynamo"});
        }
-       return resolve({"status": "successfully added domain"});
+       return resolve({"status": "successfully added domain in Dynamo"});
       });
     });
   }
@@ -67,9 +67,9 @@ export class SslScheduler {
         TableName: dataStore
       }, (err, data) => {
        if (err) {
-         return reject({"status": "failed to update domain"});
+         return reject({"status": "failed to update domain in Dynamo"});
        }
-       return resolve({"status": "successfully updated domain"});
+       return resolve({"status": "successfully updated domain in Dynamo"});
       });
     });
   }
@@ -88,9 +88,9 @@ export class SslScheduler {
         TableName: dataStore
       }, (err, data) => {
        if (err) {
-         return reject({"status": "failed to remove domain"});
+         return reject({"status": "failed to remove domain in Dynamo"});
        }
-       return resolve({"status": "successfully removed domain"});
+       return resolve({"status": "successfully removed domain in Dynamo"});
       });
     });
   }

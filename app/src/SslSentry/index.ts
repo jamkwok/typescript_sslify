@@ -159,7 +159,7 @@ export class SslSentry {
       }
       return Promise.reject({"status": "failed to find matching cloudfront distribution bound to domain"});
     } catch (error) {
-      return Promise.reject({"status": "failed listing Cloudfront Distributions perhaps due to invalid domain"});
+      return Promise.reject({"status": "failed listing Cloudfront Distributions perhaps due to invalid domain or bad AWS permissions"});
     }
   }
 

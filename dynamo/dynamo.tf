@@ -36,7 +36,7 @@ provider "aws" {
 }
 
 resource "aws_dynamodb_table" "sslSentry" {
-  name           = "dynamodb_sslSentry"
+  name           = "${var.dynamoDbName}"
   read_capacity  = "${var.dynamoReadCap}"
   write_capacity = "${var.dynamoWriteCap}"
   hash_key       = "Domain"
