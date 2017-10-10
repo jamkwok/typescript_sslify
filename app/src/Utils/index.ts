@@ -22,6 +22,11 @@ export class Utils {
 
   async getStsCredentials(): Promise<any> {
     return new Promise((resolve, reject) => {
+      //No cross role detected return no credentials
+      if(!awsRole) {
+        return resolve();
+      }
+
       this.sts.assumeRole({
         RoleArn: awsRole,
         RoleSessionName: 'canvasSslSentry'

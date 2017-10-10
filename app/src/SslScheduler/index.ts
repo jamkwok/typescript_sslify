@@ -15,7 +15,11 @@ export class SslScheduler {
 
   constructor(awsCrossRoleCredentials: any) {
     //reinstantiate AWS
-    this.dyn = new AWS.DynamoDB({credentials: awsCrossRoleCredentials, region: awsRegion});
+    if(awsCrossRoleCredentials) {
+      this.dyn = new AWS.DynamoDB({credentials: awsCrossRoleCredentials, region: awsRegion});
+    } else {
+      this.dyn = new AWS.DynamoDB({region: awsRegion});
+    }
     return this;
   }
 
