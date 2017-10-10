@@ -14,12 +14,12 @@ RUN apt-get update
 RUN apt-get install -y python-certbot-nginx
 RUN npm install -g typescript
 
-ADD app /root
-WORKDIR "/root/app"
+ADD app /
+WORKDIR "/app"
 RUN npm install
 RUN tsc
-RUN echo "0 3 * * * /usr/bin/node /typescript_sslify/app/src/app_scrape.js" > crontab.txt && crontab crontab.txt
+RUN echo "0 3 * * * /usr/bin/node /app/src/app_scrape.js" > crontab.txt && crontab crontab.txt
 
-WORKDIR "/root/app/src"
+WORKDIR "/app/src"
 EXPOSE 80 3000
 CMD [ "node", "app.js" ]
