@@ -142,10 +142,14 @@ export class SslSentry {
     try {
       let cloudfrontDistributionDomain = await this.getCloudfrontDomainByDomain(domain);
       let listOfCloudfrontDistributions = await this.listCloudfrontDistributions();
-      return listOfCloudfrontDistributions.filter((cloudfrontObject) => {
+      let matchedCloudfrontDistribution = listOfCloudfrontDistributions.filter((cloudfrontObject) => {
         //DomainName is the one extracted from DNS Cname and we also check the domain is present inside cloudfront Aliases
         return (cloudfrontObject.DomainName === cloudfrontDistributionDomain) && (cloudfrontObject.Aliases.Items.indexOf(domain) !== -1);
       })[0];
+      if (matchedCloudfrontDistribution) {
+        return Promise.resolve(matchedCloudfrontDistribution);
+      }
+      return Promise.reject({"status": "failed to find matching cloudfront distribution bound to domain"});
     } catch (error) {
       return Promise.reject({"status": "failed listing Cloudfront Distributions perhaps due to invalid domain"});
     }
