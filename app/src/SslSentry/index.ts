@@ -158,7 +158,8 @@ export class SslSentry {
         return Promise.resolve(matchedCloudfrontDistribution);
       }
       return Promise.reject({"status": "failed to find matching cloudfront distribution bound to domain"});
-    } catch (error) {
+    } catch (err) {
+      console.log(err);
       return Promise.reject({"status": "failed listing Cloudfront Distributions perhaps due to invalid domain or bad AWS permissions"});
     }
   }
@@ -175,6 +176,7 @@ export class SslSentry {
 
       this.cf.listDistributions(params, (err, data) => {
         if (err) {
+          console.log(err);
           return reject({"status": "failed listing Cloudfront Distributions"});
         }
         if (data.DistributionList.NextMarker) {
