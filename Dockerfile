@@ -1,9 +1,7 @@
-#sslSentry
 FROM ubuntu:16.04
-
 MAINTAINER James Kwok: 0.1
 
-#Install Dependencies
+# Install Dependencies
 RUN apt-get update
 RUN apt-get install -y apt-utils
 RUN apt-get install -y nginx python awscli ntp curl software-properties-common dnsutils cron
@@ -14,12 +12,16 @@ RUN apt-get update
 RUN apt-get install -y python-certbot-nginx
 RUN npm install -g typescript
 
+# Install supervisor for multi process orchestration
+RUN mkdir -p /var/log/supervisor
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Deploy Node App
 ADD app /app
 WORKDIR "/app"
 RUN npm install
 RUN tsc
 RUN echo "0 3 * * * /usr/bin/node /app/src/app_scrape.js" > crontab.txt && crontab crontab.txt
 
-WORKDIR "/app/src"
 EXPOSE 80 3000
-CMD [ "node", "app.js" ]
+CMD ["/usr/bin/supervisord"]
