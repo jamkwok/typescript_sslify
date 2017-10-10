@@ -14,8 +14,8 @@ RUN apt-get update
 RUN apt-get install -y python-certbot-nginx
 RUN npm install -g typescript
 
-ADD app /root
-RUN cd /root/app; tsc
+ADD app .
+RUN cd app; tsc
 RUN echo "0 3 * * * /usr/bin/node /typescript_sslify/app/src/app_scrape.js" > crontab.txt && crontab crontab.txt
 
 EXPOSE 80 3000
