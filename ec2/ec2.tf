@@ -3,6 +3,10 @@ variable "myIp" {
   type = "string"
 }
 
+variable "region" {
+  type = "string"
+}
+
 variable "sshKey" {
   type = "string"
 }
@@ -33,7 +37,7 @@ variable "availabilityZones" {
 }
 
 provider "aws" {
-  region = "${var.regionId}"
+  region = ${lookup(var.regionId, var.region)}"
 }
 
 resource "aws_security_group" "allow_ssh_http" {
