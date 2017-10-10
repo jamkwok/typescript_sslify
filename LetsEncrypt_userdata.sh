@@ -7,4 +7,4 @@ cd typescript_sslify
 #Build Docker Image
 docker build -t sslsentry:0.0.1 .
 #Run Docker Image
-docker run -d -t sslsentry:0.0.1
+docker run -d -p 80:80 -p 3000:3000 -t sslsentry:0.0.1
