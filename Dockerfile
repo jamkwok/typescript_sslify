@@ -14,7 +14,7 @@ RUN apt-get update
 RUN apt-get install -y python-certbot-nginx
 RUN npm install -g typescript
 
-ADD app /
+ADD app /app
 WORKDIR "/app"
 RUN npm install
 RUN tsc
