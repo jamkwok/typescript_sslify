@@ -4,8 +4,10 @@ FROM ubuntu:16.04
 MAINTAINER James Kwok: 0.1
 
 #Install Dependencies
-RUN apt-get install -y nodejs nginx python awscli ntp curl
+RUN apt-get update
+RUN apt-get install -y nginx python awscli ntp curl
 RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN apt-get install -y nodejs
 RUN add-apt-repository -y ppa:certbot/certbot
 RUN apt-get update
 RUN apt-get install -y python-certbot-nginx
