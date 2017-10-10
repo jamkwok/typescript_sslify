@@ -14,7 +14,9 @@ RUN apt-get update
 RUN apt-get install -y python-certbot-nginx
 RUN npm install -g typescript
 
-ADD app .
+ADD app /root
+WORKDIR "/root/app"
+RUN npm install
 RUN tsc
 RUN echo "0 3 * * * /usr/bin/node /typescript_sslify/app/src/app_scrape.js" > crontab.txt && crontab crontab.txt
 
