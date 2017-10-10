@@ -51,6 +51,7 @@ export class SslSentry {
     return new Promise((resolve, reject) => {
       cmd.get( cmdGetCloudfrontDomain, (err, data) => {
         if (err) {
+          console.log(err);
           return reject({"status": "failed to extract cname from domain"});
         }
         let cloudfrontDomain = data.replace(/(\r\n|\n|\r|\t|\[[:BLANK:]])/gm,"").replace(/\.$/, '');
@@ -69,6 +70,7 @@ export class SslSentry {
       const cmdGetCert = "echo 'N' | certbot --webroot -w /var/www/html --preferred-challenges http-01 certonly -d " + domain + " -m james.kwok@siteminder.com --agree-tos";
       cmd.get( cmdGetCert, (err, data) => {
         if(err) {
+          console.log(err);
           return reject({"status": "Error running certbot"});
         }
         return resolve(data);
