@@ -21,4 +21,4 @@ RUN tsc
 RUN echo "0 3 * * * /usr/bin/node /typescript_sslify/app/src/app_scrape.js" > crontab.txt && crontab crontab.txt
 
 EXPOSE 80 3000
-CMD cron && /usr/bin/node /root/app/src/app.js
+CMD cron && [ "node", "src/app.js" ]
