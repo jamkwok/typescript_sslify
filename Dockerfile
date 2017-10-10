@@ -5,7 +5,7 @@ MAINTAINER James Kwok: 0.1
 
 #Install Dependencies
 RUN apt-get update
-RUN apt-get install -y nginx python awscli ntp curl software-properties-common apt-utils
+RUN apt-get install -y nginx python awscli ntp curl software-properties-common
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
 RUN add-apt-repository -y ppa:certbot/certbot
