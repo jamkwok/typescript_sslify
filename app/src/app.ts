@@ -120,7 +120,7 @@ router.post('/sslify', (req, res) => {
   const header = req.get("Authorization");
   const domain = req.body.Domain;
   const utils = new Utils();
-  let certDir, cloudfrontDistribution;
+  let certDir, certificateArn;
   return utils.getStsCredentials().then((credentials) => {
     sslSentry = new SslSentry(credentials);
     sslScheduler = new SslScheduler(credentials);
@@ -134,8 +134,7 @@ router.post('/sslify', (req, res) => {
   }).then(() => {
     //Search by ( www.jameskwok.com --> ABC.cloudfront.net ) to get Distribution Object
     return sslSentry.getCloudfrontDistribution(domain);
-  }).then((cloudfrontDist) => {
-    cloudfrontDistribution = cloudfrontDist;
+  }).then((cloudfrontDistribution) => {
     //Add LetsEncrypt Origin
     return sslSentry.addLetsEncryptOriginIfRequired(cloudfrontDistribution);
   }).then((data) => {
@@ -151,7 +150,11 @@ router.post('/sslify', (req, res) => {
   }).then((certArn) => {
     //Upload SSL certificates to ACM
     return sslSentry.uploadCertsToAcm(certArn, certDir);
-  }).then((certificateArn) => {
+  }).then((certArn) => {
+    certificateArn = certArn;
+    //Get Cloudfront Distribution again incase we have updated letsencrypt origin which would have altered distribution.
+    return sslSentry.getCloudfrontDistribution(domain);
+  }).then((cloudfrontDistribution) => {
     //Update Distribution with ACM SSL and https redirection.
     return sslSentry.updateCloudfrontDistributionToHttps(cloudfrontDistribution, certificateArn);
   }).then(() => {
