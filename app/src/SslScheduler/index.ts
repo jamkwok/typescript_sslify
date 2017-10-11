@@ -1,5 +1,4 @@
 "use strict";
-//Hardcoded to Virginia as ACM certs need to be there for cloudfront, cloudfront itself is global
 import * as AWS from "aws-sdk";
 //Needs to be changed
 const env = require('./../../env.json');

@@ -140,7 +140,7 @@ export class SslSentry {
     }
 
     return new Promise((resolve, reject) => {
-      this.acm.importCertificate(acmParam, function(err, data) {
+      this.acm.importCertificate(acmParam, (err, data) => {
         if (err) {
           console.log(err);
           return reject({"status": "failed loading new certificates"});
