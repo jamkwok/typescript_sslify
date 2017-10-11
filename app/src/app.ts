@@ -135,7 +135,6 @@ router.post('/sslify', (req, res) => {
     //Search by ( www.jameskwok.com --> ABC.cloudfront.net ) to get Distribution Object
     return sslSentry.getCloudfrontDistribution(domain);
   }).then((cloudfrontDistribution) => {
-    console.log(cloudfrontDistribution);
     //Add LetsEncrypt Origin
     return sslSentry.addLetsEncryptOriginIfRequired(cloudfrontDistribution);
   }).then((data) => {
