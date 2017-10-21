@@ -22,7 +22,7 @@ let scrape = async () => {
   }
   let domains = await sslScheduler.getDomainsToBeRenewed();
   for (let domainObj of domains) {
-    const status = await sslSentry.httpSslify(domainObj.Domain);
+    const status = await utils.httpSslify(domainObj.Domain);
     console.log(domainObj.Domain,status);
   }
 }
